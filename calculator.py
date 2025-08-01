@@ -1,50 +1,42 @@
-def add(a, b):
-    return a + b
+import tkinter as tk
 
-def subtract(a, b):
-    return a - b
-
-def multiply(a, b):
-    return a * b
-
-def divide(a, b):
-    if b == 0:
-        return "Error: Cannot divide by zero"
-    return a / b
-
-def calculator():
-    print("Welcome to the CLI Calculator")
-    print("Operations available: +  -  *  /")
-    
-    while True:
+def click(event):
+    text = event.widget.cget("text")
+    if text == "=":
         try:
-            num1 = float(input("Enter first number: "))
-            op = input("Enter operation (+, -, *, /): ")
-            num2 = float(input("Enter second number: "))
-            
-            if op == '+':
-                result = add(num1, num2)
-            elif op == '-':
-                result = subtract(num1, num2)
-            elif op == '*':
-                result = multiply(num1, num2)
-            elif op == '/':
-                result = divide(num1, num2)
-            else:
-                print("Invalid operator! Try again.")
-                continue
-            
-            print("Result:", result)
-        
-        except ValueError:
-            print("Invalid input! Please enter numbers.")
-            continue
+            result = str(eval(str(screen.get())))
+            screen.set(result)
+        except:
+            screen.set("Error")
+    elif text == "C":
+        screen.set("")
+    else:
+        screen.set(screen.get() + text)
 
-        # Ask to continue or exit
-        choice = input("Do you want to continue? (yes/no): ").lower()
-        if choice != 'yes':
-            print("Exiting Calculator. Goodbye!")
-            break
+root = tk.Tk()
+root.geometry("300x400")
+root.title("Calculator")
 
-# Start the calculator
-calculator()
+screen = tk.StringVar()
+entry = tk.Entry(root, textvar=screen, font="Arial 20")
+entry.pack(fill="both", ipadx=8, pady=10, padx=10)
+
+btn_frame = tk.Frame(root)
+btn_frame.pack()
+
+buttons = [
+    ["7", "8", "9", "/"],
+    ["4", "5", "6", "*"],
+    ["1", "2", "3", "-"],
+    ["C", "0", "=", "+"]
+]
+
+for row in buttons:
+    frame = tk.Frame(btn_frame)
+    frame.pack()
+    for btn_text in row:
+        btn = tk.Button(frame, text=btn_text, font="Arial 15", height=2, width=6)
+        btn.pack(side="left", padx=5, pady=5)
+        btn.bind("<Button-1>", click)
+
+root.mainloop()
